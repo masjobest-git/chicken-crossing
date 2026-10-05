@@ -3,7 +3,7 @@
 - Select all squeres on the board;
 - Message 
 - Control buttons
-- Resset buton
+- Resset button
 - Set Position of the chicken
 - Set Position of the first patrol car
 - Set Position of the secound patrol car
@@ -45,17 +45,17 @@ let chickenPosition = 24;
 
 //Patrol car 1
 
-let car1Position = 21;
-let car1Direction = -5;
+let car1Position = 6;
+let car1Direction = 5;
 
 //Patrol car 2
 
-let car2Position = 3;
+let car2Position = 8;
 let car2Direction = 5;
 
 // Array for collision checking
 
-let cars = [car1Position, car2Position];
+//let cars = [car1Position, car2Position];
 
 //Game status
 
@@ -71,19 +71,11 @@ function renderBoard() {
     square.textContent = '';
     });
 
-    //Update cars array
-
-    cars = [car1Position, car2Position];
-
-// Draw cars
-
-    cars.forEach((carPosition) => {
-    squares[carPosition].textContent = '🚗';
-    });
-
-// Draw chicken
-
     squares[chickenPosition].textContent = '🐔';
+
+    squares[car1Position].textContent = '🚗';
+
+    squares[car2Position].textContent = '🚗';
 }
 
 /*----------------------------- Move Chicken -----------------------------*/
@@ -92,27 +84,145 @@ function moveChicken(direction) {
     if (gameOver) return;
 
     if (direction === 'up') {
+        console.log('UP', chickenPosition);
         if (chickenPosition >= 5) {
-            chickenPosition -= 5;
+        chickenPosition -= 5;
         }
     }
     if (direction === 'down') {
+        console.log('DOWN', chickenPosition);
         if (chickenPosition <= 19) {
-            chickenPosition += 5;
+        chickenPosition += 5;
         }
     }
     if (direction === 'left') {
+        console.log('LEFT', chickenPosition % 5);
         if (chickenPosition % 5 !== 0) {
             chickenPosition -= 1;
         }
     }
     if (direction === 'right') {
+        console.log('RIGHT', chickenPosition % 5);
         if (chickenPosition % 5 !== 4) {
             chickenPosition += 1;
         }
-        checkGame ();
-        renderBoard();
+    checkGame ();
+    renderBoard();
     }
 }
 
+/*----------------------------- Move Cars -----------------------------*/
+
+function moveCars() {
+
+    if (gameOver) return;
+
+// First patrol CAR
+
+    car1Position += car1Direction;
+
+    if (car1Position >= 21) {
+    car1Direction = -5;
+    }
+
+    if (car1Position <= 1) {
+    car1Direction = 5;
+    }
+
+// Secound patrol CAR
+
+    car2Position += car2Direction;
+
+    if (car2Position >= 23) {
+    car2Direction = -5;
+    }
+
+    if (car2Position <= 3) {
+    car2Direction = 5;
+    }
+
+checkGame();
+
+renderBoard();
+}
+
+/*----------------------------- Check the GAME -----------------------------*/
+
+function checkGame() {
+
+    if (
+    chickenPosition === car1Position || chickenPosition === car2Position) {
+
+    gameOver = true;
+
+    messageElement.textContent = '💥 GAME OVER! The chicken got hit!';
+
+    return;
+    }
+
+    if (chickenPosition <= 4) {
+
+    gameOver = true;
+
+    messageElement.textContent = '🎉 YOU WIN! The chicken crossed the road!';
+    }
+}
+
+/*----------------------------- Reset the GAME -----------------------------*/
+
+function resetGame() {
+    chickenPosition = 24;
+
+    car1Position = 21;
+    car2Position = 3;
+
+    car1Direction = -5;
+    car2Direction = 5;
+
+    cars = [car1Position, car2Position];
+
+    gameOver = false;
+
+    messageElement.textContent = 'Help the chicken cross the road!';
+    
+    renderBoard();
+}
+
 /*----------------------------- Event Listeners -----------------------------*/
+
+// Chicken movement buttons
+
+upButton.addEventListener('click', function () {
+    moveChicken('up');
+});
+
+downButton.addEventListener('click', function () {
+    moveChicken('down');
+});
+
+leftButton.addEventListener('click', function () {
+    moveChicken('left');
+});
+
+rightButton.addEventListener('click', function () {
+    moveChicken('right');
+});
+
+//Resset BUTTON
+
+resetButton.addEventListener('click', resetGame);
+
+
+/*----------------------------- Automatic Cars ------------------------------*/
+
+// Cars move every 700 milliseconds
+
+setInterval(function () {
+
+    moveCars();
+
+}, 700);
+
+/*-------------------------------- Start GAME ------------------------------------*/
+
+    renderBoard();
