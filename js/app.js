@@ -45,17 +45,13 @@ let chickenPosition = 24;
 
 //Patrol car 1
 
-let car1Position = 6;
-let car1Direction = 5;
+let car1Position = 15;
+let car1Direction = 1;
 
 //Patrol car 2
 
-let car2Position = 8;
-let car2Direction = 5;
-
-// Array for collision checking
-
-//let cars = [car1Position, car2Position];
+let car2Position = 9;
+let car2Direction = -1;
 
 //Game status
 
@@ -80,7 +76,7 @@ function renderBoard() {
 
 /*----------------------------- Move Chicken -----------------------------*/
 
-function moveChicken(direction) {
+function moveChicken (direction) {
     if (gameOver) return;
 
     if (direction === 'up') {
@@ -121,24 +117,24 @@ function moveCars() {
 
     car1Position += car1Direction;
 
-    if (car1Position >= 21) {
-    car1Direction = -5;
+    if (car1Position >= 19) {
+    car1Direction = -1;
     }
 
-    if (car1Position <= 1) {
-    car1Direction = 5;
+    if (car1Position <= 15) {
+    car1Direction = 1;
     }
 
 // Secound patrol CAR
 
     car2Position += car2Direction;
 
-    if (car2Position >= 23) {
-    car2Direction = -5;
+    if (car2Position >= 9) {
+    car2Direction = -1;
     }
 
-    if (car2Position <= 3) {
-    car2Direction = 5;
+    if (car2Position <= 5) {
+    car2Direction = 1;
     }
 
 checkGame();
@@ -173,11 +169,11 @@ function checkGame() {
 function resetGame() {
     chickenPosition = 24;
 
-    car1Position = 21;
-    car2Position = 3;
+    car1Position = 15;
+    car2Direction = 1;
 
-    car1Direction = -5;
-    car2Direction = 5;
+    car2Position = 9;
+    car2Direction = -1;
 
     cars = [car1Position, car2Position];
 
