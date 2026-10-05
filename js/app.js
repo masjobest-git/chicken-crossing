@@ -1,4 +1,4 @@
-/*--------------------------PSEUDO CODE--------------------*/
+/*-------------------------------- PSEUDO CODE --------------------------------*/
 /*
 - Select all squeres on the board;
 - Message 
@@ -61,9 +61,58 @@ let cars = [car1Position, car2Position];
 
 let gameOver = false;
 
-
 /*-------------------------------- Functions --------------------------------*/
 
+function renderBoard() {
 
+  // Clear board
+
+    squares.forEach((square) => {
+    square.textContent = '';
+    });
+
+    //Update cars array
+
+    cars = [car1Position, car2Position];
+
+// Draw cars
+
+    cars.forEach((carPosition) => {
+    squares[carPosition].textContent = '🚗';
+    });
+
+// Draw chicken
+
+    squares[chickenPosition].textContent = '🐔';
+}
+
+/*----------------------------- Move Chicken -----------------------------*/
+
+function moveChicken(direction) {
+    if (gameOver) return;
+
+    if (direction === 'up') {
+        if (chickenPosition >= 5) {
+            chickenPosition -= 5;
+        }
+    }
+    if (direction === 'down') {
+        if (chickenPosition <= 19) {
+            chickenPosition += 5;
+        }
+    }
+    if (direction === 'left') {
+        if (chickenPosition % 5 !== 0) {
+            chickenPosition -= 1;
+        }
+    }
+    if (direction === 'right') {
+        if (chickenPosition % 5 !== 4) {
+            chickenPosition += 1;
+        }
+        checkGame ();
+        renderBoard();
+    }
+}
 
 /*----------------------------- Event Listeners -----------------------------*/
