@@ -53,6 +53,8 @@ let car1Direction = 1;
 let car2Position = 9;
 let car2Direction = -1;
 
+let carTimer;
+
 //Game status
 
 let gameOver = false;
@@ -117,11 +119,11 @@ function moveCars() {
 
     car1Position += car1Direction;
 
-    if (car1Position >= 19) {
+    if (car1Position === 19) {
     car1Direction = -1;
     }
 
-    if (car1Position <= 15) {
+    if (car1Position === 15) {
     car1Direction = 1;
     }
 
@@ -129,12 +131,12 @@ function moveCars() {
 
     car2Position += car2Direction;
 
-    if (car2Position >= 9) {
-    car2Direction = -1;
+    if (car2Position === 5) {
+    car2Direction = 1;
     }
 
-    if (car2Position <= 5) {
-    car2Direction = 1;
+    if (car2Position === 9) {
+    car2Direction = -1;
     }
 
 checkGame();
@@ -167,20 +169,19 @@ function checkGame() {
 /*----------------------------- Reset the GAME -----------------------------*/
 
 function resetGame() {
+
     chickenPosition = 24;
 
     car1Position = 15;
-    car2Direction = 1;
+    car1Direction = 1;
 
     car2Position = 9;
     car2Direction = -1;
 
-    cars = [car1Position, car2Position];
-
     gameOver = false;
 
     messageElement.textContent = 'Help the chicken cross the road!';
-    
+
     renderBoard();
 }
 
@@ -213,11 +214,15 @@ resetButton.addEventListener('click', resetGame);
 
 // Cars move every 700 milliseconds
 
-setInterval(function () {
+carTimer = setInterval (function(){
+    moveCars();
+}, 700);
+
+/*setInterval(function () {
 
     moveCars();
 
-}, 700);
+}, 700); */
 
 /*-------------------------------- Start GAME ------------------------------------*/
 
