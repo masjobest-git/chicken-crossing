@@ -3,6 +3,8 @@ body {
     font-family: system-ui, sans-serif;
     margin: 0;
     text-align: center;
+    margin: 0;
+
 }
 main {
     display: flex;
@@ -15,6 +17,60 @@ h1 {
 }
 h2 {
     min-height: 35px;
+}
+
+/*-------------------------INTRO PAGE-------------------------*/
+
+/* INTRO SCREEN */
+
+#introScreen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: skyblue;
+
+    overflow: hidden;
+}
+
+/* INTRO IMAGE */
+
+#introImage {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+
+    display: block;
+}
+
+/* PLAY BUTTON */
+
+#playButton {
+    position: absolute;
+
+    left: 50%;
+    top: 70%;
+
+    transform: translate(-50%, -50%);
+
+    width: 260px;
+    height: 180px;
+
+    background: transparent;
+    border: none;
+
+    cursor: pointer;
+}
+/* GAME */
+
+#gameScreen {
+    display: none;
 }
 
 /*-------------------------ROAD-------------------------*/

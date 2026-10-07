@@ -14,6 +14,7 @@
 - Function that will check if patrol cars have hit the chicken
 - Function that will trigger Reset button
 - Functions that will allow player to use arrows on keyboard
+- Create Level 2 faster moving cars
 */
 
 /*-------------------------------- Constants --------------------------------*/
@@ -36,6 +37,17 @@ const resetButton = document.querySelector('#reset');
 // Next level button
 const nextLevelButton = document.querySelector('#nextLevel');
 
+/*-------------------------------- INTRO PAGE --------------------------------*/
+
+const playButton =
+document.querySelector('#playButton');
+
+const introScreen =
+document.querySelector('#introScreen');
+
+const gameScreen =
+document.querySelector('#gameScreen');
+
 /*-------------------------------- Variables --------------------------------*/
 
 // Chicken starts at the bottom right corner
@@ -55,9 +67,20 @@ let gameOver = false;
 // Level
 let level = 1;
 
+//Mines and Lorry
+
+let minePosition = 12;
+
+//LORRY Truck
+
+let lorryPosition = 20;
+let lorryDirection = -1;
+
 // Car timer
 let carTimer;
 
+// Lorry truck timer
+let lorryTimer;
 /*-------------------------------- Functions --------------------------------*/
 
 function renderBoard() {
@@ -73,6 +96,17 @@ function renderBoard() {
     // Cars
     squares[car1Position].textContent = '🚗';
     squares[car2Position].textContent = '🚗';
+
+    // LEVEL 2 ONLY ADDING MINES AND LORRY
+
+    if (level === 2) {
+
+// Mine
+    squares[minePosition].textContent = '💣';
+
+// Lorry
+    squares[lorryPosition].textContent = '🚚';
+    }
 }
 
 /*----------------------------- Move Chicken -----------------------------*/
@@ -86,8 +120,6 @@ function moveChicken(direction) {
     // UP
     if (direction === 'up') {
 
-        console.log('UP', chickenPosition);
-
         if (chickenPosition >= 5) {
             chickenPosition -= 5;
         }
@@ -97,8 +129,6 @@ function moveChicken(direction) {
 
     if (direction === 'down') {
 
-        console.log('DOWN', chickenPosition);
-
         if (chickenPosition <= 19) {
             chickenPosition += 5;
         }
@@ -107,8 +137,6 @@ function moveChicken(direction) {
     // LEFT
     if (direction === 'left') {
 
-        console.log('LEFT', chickenPosition % 5);
-
         if (chickenPosition % 5 !== 0) {
             chickenPosition -= 1;
         }
@@ -116,9 +144,7 @@ function moveChicken(direction) {
 
     // RIGHT
     if (direction === 'right') {
-
-        console.log('RIGHT', chickenPosition % 5);
-
+        
         if (chickenPosition % 5 !== 4) {
             chickenPosition += 1;
         }
@@ -165,6 +191,29 @@ function moveCars() {
         car2Direction = -1;
     }
 
+    checkGame();
+
+// Update board
+    renderBoard();
+
+}
+
+/*---------------- LEVEL 2 - LORRY ----------------*/
+
+    function moveLorry() {
+
+    if (gameOver || level !== 2) return;
+
+    lorryPosition += lorryDirection *5;
+
+    if (lorryPosition === 5) {
+        lorryDirection = 1;
+    }
+
+    if (lorryPosition === 20) {
+        lorryDirection = -1;
+    }
+
 // Check collision
 
     checkGame();
@@ -193,6 +242,36 @@ function checkGame() {
 
         return;
     }
+
+/*---------------- LEVEL 2 - MINE ----------------*/
+
+    if (level === 2 && chickenPosition === minePosition) {
+
+        gameOver = true;
+
+        clearInterval(carTimer);
+
+        messageElement.textContent =
+            '💣 BOOM! The chicken stepped on a mine!';
+
+        return;
+    }
+
+/*---------------- LEVEL 2 - LORRY ----------------*/
+
+    if (level === 2 && chickenPosition === lorryPosition) {
+
+        gameOver = true;
+
+        clearInterval(carTimer);
+        clearInterval(lorryTimer);
+
+        messageElement.textContent =
+            '🚚 CRASH! The chicken got hit by the lorry!';
+
+        return;
+    }
+
 
 /*---------------- WIN ----------------*/
 
@@ -237,6 +316,13 @@ function nextLevel() {
     car2Position = 9;
     car2Direction = -1;
 
+    // Reset mine
+    minePosition = 12;
+
+    // Reset Lorry
+    lorryPosition = 20;
+    lorryDirection = -1;
+
 // Game active
     gameOver = false;
 
@@ -245,7 +331,7 @@ function nextLevel() {
 
 // Message
     messageElement.textContent =
-        'LEVEL 2! Cars are faster!';
+        'LEVEL 2! Watch out for the mine and lorry!';
 
 // Show starting positions
     renderBoard();
@@ -254,6 +340,11 @@ function nextLevel() {
     carTimer = setInterval(function () {
         moveCars();
     }, 400);
+
+    // Lorry
+    lorryTimer = setInterval(function () {
+        moveLorry();
+    }, 800);
 }
 
 /*----------------------------- RESET GAME -----------------------------*/
@@ -276,6 +367,13 @@ function resetGame() {
     car2Position = 9;
     car2Direction = -1;
 
+    // Reset mine
+    minePosition = 12;
+
+    // Reset Lorry
+    lorryPosition = 20;
+    lorryDirection = -1;
+
 // Game active
     gameOver = false;
 
@@ -283,8 +381,7 @@ function resetGame() {
     nextLevelButton.hidden = true;
 
 // Message
-    messageElement.textContent =
-        'Help the chicken cross the road!';
+    messageElement.textContent ='Help the chicken cross the road!';
 
 // Draw board
     renderBoard();
@@ -322,6 +419,37 @@ resetButton.addEventListener('click', resetGame);
 
 // NEXT LEVEL
 nextLevelButton.addEventListener('click', nextLevel);
+
+// INTRO PAGE
+
+playButton.addEventListener('click', function () {
+
+    introScreen.style.display = 'none';
+
+    gameScreen.style.display = 'block';
+
+});
+
+/*----------------------------- Keyboard ------------------------------------*/
+
+document.addEventListener('keydown', function (event) {
+
+    if (event.key === 'ArrowUp') {
+    moveChicken('up');
+    }
+
+    if (event.key === 'ArrowDown') {
+    moveChicken('down');
+    }
+
+    if (event.key === 'ArrowLeft') {
+    moveChicken('left');
+    }
+
+    if (event.key === 'ArrowRight') {
+    moveChicken('right');
+    }
+});
 
 /*----------------------------- AUTOMATIC CARS -----------------------------*/
 
