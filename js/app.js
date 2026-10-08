@@ -12,14 +12,9 @@ const resetButton = document.querySelector('#reset');
 
 const nextLevelButton = document.querySelector('#nextLevel');
 
-const playButton =
-document.querySelector('#playButton');
+const playButton = document.querySelector('#playButton');
 
-const introScreen =
-document.querySelector('#introScreen');
-
-const gameScreen =
-document.querySelector('#gameScreen');
+const introScreen = document.querySelector('#introScreen');
 
 let chickenPosition = 24;
 
@@ -232,6 +227,8 @@ function nextLevel() {
         'LEVEL 2! Watch out for the mine and lorry!';
 
     renderBoard();
+    clearInterval(carTimer);
+    clearInterval(lorryTimer);
 
     carTimer = setInterval(function () {
         moveCars();
@@ -245,7 +242,7 @@ function nextLevel() {
 function resetGame() {
 
     clearInterval(carTimer);
-
+    clearInterval(lorryTimer);
     level = 1;
 
     chickenPosition = 24;
@@ -297,8 +294,6 @@ nextLevelButton.addEventListener('click', nextLevel);
 playButton.addEventListener('click', function () {
 
     introScreen.style.display = 'none';
-
-    gameScreen.style.display = 'block';
 
 });
 
