@@ -1,43 +1,16 @@
-/*-------------------------------- PSEUDO CODE --------------------------------*/
-/*
-- Select all squares on the board;
-- Message 
-- Control buttons
-- Reset button
-- Set Position of the chicken
-- Set Position of the first patrol car
-- Set Position of the second patrol car
-- Collision checking
-- Stop movement if game is over
-- Create functions that will allow chicken to move
-- Create functions that will allow patrol cars to move
-- Function that will check if patrol cars have hit the chicken
-- Function that will trigger Reset button
-- Functions that will allow player to use arrows on keyboard
-- Create Level 2 faster moving cars
-*/
 
-/*-------------------------------- Constants --------------------------------*/
-
-// All squares on the board
 const squares = document.querySelectorAll('.square');
 
-// Message
 const messageElement = document.querySelector('#message');
 
-// Control buttons
 const upButton = document.querySelector('#up');
 const downButton = document.querySelector('#down');
 const leftButton = document.querySelector('#left');
 const rightButton = document.querySelector('#right');
 
-// Reset button
 const resetButton = document.querySelector('#reset');
 
-// Next level button
 const nextLevelButton = document.querySelector('#nextLevel');
-
-/*-------------------------------- INTRO PAGE --------------------------------*/
 
 const playButton =
 document.querySelector('#playButton');
@@ -48,84 +21,56 @@ document.querySelector('#introScreen');
 const gameScreen =
 document.querySelector('#gameScreen');
 
-/*-------------------------------- Variables --------------------------------*/
-
-// Chicken starts at the bottom right corner
 let chickenPosition = 24;
 
-// Patrol car 1
 let car1Position = 15;
 let car1Direction = 1;
 
-// Patrol car 2
 let car2Position = 9;
 let car2Direction = -1;
 
-// Game status
 let gameOver = false;
 
-// Level
 let level = 1;
 
-//Mines and Lorry
-
 let minePosition = 12;
-
-//LORRY Truck
 
 let lorryPosition = 20;
 let lorryDirection = -1;
 
-// Car timer
 let carTimer;
 
-// Lorry truck timer
 let lorryTimer;
-/*-------------------------------- Functions --------------------------------*/
 
 function renderBoard() {
 
-// Clear board
     squares.forEach((square) => {
         square.textContent = '';
     });
 
-    // Chicken
     squares[chickenPosition].textContent = '🐔';
 
-    // Cars
     squares[car1Position].textContent = '🚗';
     squares[car2Position].textContent = '🚗';
 
-    // LEVEL 2 ONLY ADDING MINES AND LORRY
-
     if (level === 2) {
 
-// Mine
     squares[minePosition].textContent = '💣';
 
-// Lorry
     squares[lorryPosition].textContent = '🚚';
     }
 }
 
-/*----------------------------- Move Chicken -----------------------------*/
-
 function moveChicken(direction) {
-
-// Don't move if game is over
 
     if (gameOver) return;
 
-    // UP
     if (direction === 'up') {
 
         if (chickenPosition >= 5) {
             chickenPosition -= 5;
         }
     }
-
-// DOWN
 
     if (direction === 'down') {
 
@@ -134,7 +79,6 @@ function moveChicken(direction) {
         }
     }
 
-    // LEFT
     if (direction === 'left') {
 
         if (chickenPosition % 5 !== 0) {
@@ -142,7 +86,6 @@ function moveChicken(direction) {
         }
     }
 
-    // RIGHT
     if (direction === 'right') {
         
         if (chickenPosition % 5 !== 4) {
@@ -150,24 +93,13 @@ function moveChicken(direction) {
         }
     }
 
-// Check collision / win
-
     checkGame();
-
-// Update board
-
     renderBoard();
 }
 
-/*----------------------------- Move Cars -----------------------------*/
-
 function moveCars() {
 
-// Don't move if game is over
-
     if (gameOver) return;
-
-/*---------------- FIRST CAR ----------------*/
 
     car1Position += car1Direction;
 
@@ -178,8 +110,6 @@ function moveCars() {
     if (car1Position === 15) {
         car1Direction = 1;
     }
-
-/*---------------- SECOND CAR ----------------*/
 
     car2Position += car2Direction;
 
@@ -192,13 +122,8 @@ function moveCars() {
     }
 
     checkGame();
-
-// Update board
     renderBoard();
-
 }
-
-/*---------------- LEVEL 2 - LORRY ----------------*/
 
     function moveLorry() {
 
@@ -214,19 +139,11 @@ function moveCars() {
         lorryDirection = -1;
     }
 
-// Check collision
-
     checkGame();
-
-    // Update board
     renderBoard();
 }
 
-/*----------------------------- Check the GAME -----------------------------*/
-
 function checkGame() {
-
-/*---------------- COLLISION ----------------*/
 
     if (
         chickenPosition === car1Position ||
@@ -243,8 +160,6 @@ function checkGame() {
         return;
     }
 
-/*---------------- LEVEL 2 - MINE ----------------*/
-
     if (level === 2 && chickenPosition === minePosition) {
 
         gameOver = true;
@@ -256,8 +171,6 @@ function checkGame() {
 
         return;
     }
-
-/*---------------- LEVEL 2 - LORRY ----------------*/
 
     if (level === 2 && chickenPosition === lorryPosition) {
 
@@ -272,17 +185,12 @@ function checkGame() {
         return;
     }
 
-
-/*---------------- WIN ----------------*/
-
     if (chickenPosition <= 4) {
 
         gameOver = true;
 
         clearInterval(carTimer);
 
-
-        // LEVEL 1
         if (level === 1) {
 
             messageElement.textContent =
@@ -291,7 +199,6 @@ function checkGame() {
             nextLevelButton.hidden = false;
         }
 
-        // LEVEL 2
         else {
 
             messageElement.textContent =
@@ -300,127 +207,92 @@ function checkGame() {
     }
 }
 
-/*----------------------------- NEXT LEVEL -----------------------------*/
-
 function nextLevel() {
 
     level = 2;
 
-// Reset chicken
     chickenPosition = 24;
 
-// Reset cars
     car1Position = 15;
     car1Direction = 1;
 
     car2Position = 9;
     car2Direction = -1;
 
-    // Reset mine
     minePosition = 12;
 
-    // Reset Lorry
     lorryPosition = 20;
     lorryDirection = -1;
 
-// Game active
     gameOver = false;
 
-// Hide button
     nextLevelButton.hidden = true;
 
-// Message
     messageElement.textContent =
         'LEVEL 2! Watch out for the mine and lorry!';
 
-// Show starting positions
     renderBoard();
 
-// LEVEL 2 - faster cars
     carTimer = setInterval(function () {
         moveCars();
     }, 400);
 
-    // Lorry
     lorryTimer = setInterval(function () {
         moveLorry();
     }, 800);
 }
 
-/*----------------------------- RESET GAME -----------------------------*/
-
 function resetGame() {
 
-// Stop current timer
     clearInterval(carTimer);
 
-// Back to level 1
     level = 1;
 
-// Reset chicken
     chickenPosition = 24;
 
-// Reset cars
     car1Position = 15;
     car1Direction = 1;
 
     car2Position = 9;
     car2Direction = -1;
 
-    // Reset mine
     minePosition = 12;
 
-    // Reset Lorry
     lorryPosition = 20;
     lorryDirection = -1;
 
-// Game active
     gameOver = false;
 
-// Hide next level button
     nextLevelButton.hidden = true;
 
-// Message
     messageElement.textContent ='Help the chicken cross the road!';
 
-// Draw board
     renderBoard();
 
-// Start cars again
     carTimer = setInterval(function () {
         moveCars();
     }, 700);
 }
 
-/*----------------------------- EVENT LISTENERS -----------------------------*/
-
-// UP
 upButton.addEventListener('click', function () {
     moveChicken('up');
 });
 
-// DOWN
 downButton.addEventListener('click', function () {
     moveChicken('down');
 });
 
-// LEFT
 leftButton.addEventListener('click', function () {
     moveChicken('left');
 });
 
-// RIGHT
 rightButton.addEventListener('click', function () {
     moveChicken('right');
 });
 
-// RESET
 resetButton.addEventListener('click', resetGame);
 
-// NEXT LEVEL
 nextLevelButton.addEventListener('click', nextLevel);
-
-// INTRO PAGE
 
 playButton.addEventListener('click', function () {
 
@@ -429,8 +301,6 @@ playButton.addEventListener('click', function () {
     gameScreen.style.display = 'block';
 
 });
-
-/*----------------------------- Keyboard ------------------------------------*/
 
 document.addEventListener('keydown', function (event) {
 
@@ -451,14 +321,8 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-/*----------------------------- AUTOMATIC CARS -----------------------------*/
-
-// Level 1 cars move every 700 milliseconds
-
 carTimer = setInterval(function () {
     moveCars();
 }, 700);
-
-/*----------------------------- START GAME -----------------------------*/
 
 renderBoard();
