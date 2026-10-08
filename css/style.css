@@ -19,6 +19,25 @@ h2 {
     min-height: 35px;
 }
 
+#instructions {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+
+    width: 280px;
+
+    background: white;
+    border: 2px solid black;
+    border-radius: 8px;
+
+    padding: 10px;
+}
+
+#instructions summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
 /*-------------------------INTRO PAGE-------------------------*/
 
 /* INTRO SCREEN */

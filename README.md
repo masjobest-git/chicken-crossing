@@ -55,7 +55,7 @@
 
 #### Chicken Crossing Game Board LEVEL 1
 
-![Intro Screen](./images/level-1.png)
+![Intro Screen](./images/Level-1-and-Instructions.png)
 
 #### Chicken Crossing Game Board LEVEL 2
 
