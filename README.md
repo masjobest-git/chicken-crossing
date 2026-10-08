@@ -18,6 +18,7 @@
 * JavaScript
 * HTML
 * CSS
+* GitHub
 
 ***
 
@@ -65,7 +66,7 @@
 
 ### ***Credits***
 
-#### Support and Help: Software Engineering Immersive @ General Assembly
+#### Support and Help: FewGoodEngineers @ General Assembly
 
 #### Pictures: Custom project assets
 
