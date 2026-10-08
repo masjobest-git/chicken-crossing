@@ -243,6 +243,7 @@ function resetGame() {
 
     clearInterval(carTimer);
     clearInterval(lorryTimer);
+    
     level = 1;
 
     chickenPosition = 24;
